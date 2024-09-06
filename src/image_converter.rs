@@ -43,6 +43,10 @@ impl ImageConverter for ImageToTextConverter {
 }
 
 impl ImageToTextConverter {
+    pub fn from_image_wrapper(image_wrapper: ImageWrapper) -> Self {
+        Self { image_wrapper }
+    }
+    
     fn convert_to_2d_char_matrix(image_wrapper: &mut ImageWrapper, scale_options: ImageScaleOptions) -> Vec<Vec<char>> {
 
         if let ImageScaleOptions::HalfHeight = scale_options {
@@ -142,42 +146,42 @@ mod tests {
 
 
 
-    // #[test]
-    // fn e2e_image_conversion_test() {
-    //     let path = "test/test_image.png";
-    //     let red_pixel_indexes: Vec<u32> = (0..30).collect();
-    //     let green_pixel_indexes: Vec<u32> = (30..70).collect();
-    //     let blue_pixel_indexes: Vec<u32> = (70..100).collect();
-    //     let white_pixel_index: u32 = 22;
-    //     let black_pixel_index: u32 = 56;
-    // 
-    //     let mut image_wrapper = ImageWrapper::from_path(path).unwrap();
-    //     let text_image = convert_to_2d_char_matrix(&mut image_wrapper, ImageScaleOptions::None);
-    // 
-    //     let mut char_counter: u32 = 0;
-    //     for row in text_image {
-    //         for character in row {
-    //             if black_pixel_index == char_counter {
-    //                 assert_eq!(character, CHAR_MAPPING[0]); // 0 -> ' '
-    // 
-    //             } else if white_pixel_index == char_counter {
-    //                 assert_eq!(character, CHAR_MAPPING[7]); // 7 -> '@'
-    // 
-    //             } else if red_pixel_indexes.contains(&char_counter) {
-    //                 assert_eq!(character, CHAR_MAPPING[2]); // 2 => ':'
-    // 
-    //             } else if green_pixel_indexes.contains(&char_counter) {
-    //                 assert_eq!(character, CHAR_MAPPING[5]); // 5 -> 'X'
-    // 
-    //             } else if blue_pixel_indexes.contains(&char_counter) {
-    //                 assert_eq!(character, CHAR_MAPPING[0]); // 0 -> ' '
-    // 
-    //             } else {
-    //                 panic!("char index was out of range!");
-    //             }
-    // 
-    //             char_counter += 1;
-    //         }
-    //     }
-    // }
+    #[test]
+    fn e2e_image_conversion_test() {
+        let path = "test/test_image.png";
+        let red_pixel_indexes: Vec<u32> = (0..30).collect();
+        let green_pixel_indexes: Vec<u32> = (30..70).collect();
+        let blue_pixel_indexes: Vec<u32> = (70..100).collect();
+        let white_pixel_index: u32 = 22;
+        let black_pixel_index: u32 = 56;
+    
+        let mut image_wrapper = ImageWrapper::from_path(path).unwrap();
+        let text_image = ImageToTextConverter::convert_to_2d_char_matrix(&mut image_wrapper, ImageScaleOptions::None);
+    
+        let mut char_counter: u32 = 0;
+        for row in text_image {
+            for character in row {
+                if black_pixel_index == char_counter {
+                    assert_eq!(character, CHAR_MAPPING[0]); // 0 -> ' '
+    
+                } else if white_pixel_index == char_counter {
+                    assert_eq!(character, CHAR_MAPPING[7]); // 7 -> '@'
+    
+                } else if red_pixel_indexes.contains(&char_counter) {
+                    assert_eq!(character, CHAR_MAPPING[2]); // 2 => ':'
+    
+                } else if green_pixel_indexes.contains(&char_counter) {
+                    assert_eq!(character, CHAR_MAPPING[5]); // 5 -> 'X'
+    
+                } else if blue_pixel_indexes.contains(&char_counter) {
+                    assert_eq!(character, CHAR_MAPPING[0]); // 0 -> ' '
+    
+                } else {
+                    panic!("char index was out of range!");
+                }
+    
+                char_counter += 1;
+            }
+        }
+    }
 }
