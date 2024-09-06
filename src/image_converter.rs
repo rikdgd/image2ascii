@@ -25,20 +25,7 @@ impl ImageConverter for ImageToTextConverter {
     type ConvertsTo = String;
 
     fn convert(&mut self) -> Self::ConvertsTo {
-        let mut image_buffer = String::new();
-        let image = Self::convert_to_2d_char_matrix(
-            &mut self.image_wrapper,
-            ImageScaleOptions::default()
-        );
-
-        for row in image {
-            for character in row {
-                image_buffer.push(character);
-            }
-            image_buffer.push('\n');
-        }
-
-        image_buffer
+        Self::convert_to_text(&mut self.image_wrapper, ImageScaleOptions::default())
     }
 }
 
@@ -47,6 +34,8 @@ impl ImageToTextConverter {
         Self { image_wrapper }
     }
     
+    #[allow(unused)]
+    #[deprecated(note = "Converting the image to a 2D matrix is unnecessary and makes the process take longer.")]
     fn convert_to_2d_char_matrix(image_wrapper: &mut ImageWrapper, scale_options: ImageScaleOptions) -> Vec<Vec<char>> {
 
         if let ImageScaleOptions::HalfHeight = scale_options {
@@ -72,6 +61,31 @@ impl ImageToTextConverter {
             }
         }
 
+        text_image
+    }
+    
+    fn convert_to_text(image_wrapper: &mut ImageWrapper, scale_options: ImageScaleOptions) -> String {
+        if let ImageScaleOptions::HalfHeight = scale_options {
+            image_wrapper.prepare_scale();
+        }
+
+        let pixels = image_wrapper.buffer.pixels();
+        
+        let mut text_image = String::new();
+        let mut row_counter: u32 = 0;
+        
+        for pixel in pixels {
+            let pixel_char = pixel_to_char(pixel);
+            text_image.push(pixel_char);
+            
+            if row_counter == image_wrapper.width - 1 {
+                row_counter = 0;
+                text_image.push('\n');
+            } else {
+                row_counter += 1;
+            }
+        }
+        
         text_image
     }
 }
