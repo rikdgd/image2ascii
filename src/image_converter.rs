@@ -1,4 +1,4 @@
-use crate::image_wrapper::{Image, ImageWrapper};
+use crate::image_wrapper::{ImageWrapper};
 
 const CHAR_MAPPING: [char; 8] = [
     ' ',
@@ -77,6 +77,7 @@ impl ImageToTextConverter {
 }
 
 #[derive(Default)]
+#[allow(unused)]
 pub enum ImageScaleOptions {
     None,
     #[default]
@@ -114,7 +115,6 @@ mod tests {
     use super::{
         pixel_to_char, 
         CHAR_MAPPING, 
-        ImageConverter, 
         ImageToTextConverter, 
         ImageScaleOptions,
     };

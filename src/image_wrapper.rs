@@ -2,6 +2,7 @@ use std::error::Error;
 use image::{ImageBuffer, ImageReader};
 use image::imageops::FilterType;
 
+#[allow(unused)]
 pub trait Image {
     type Output;
 
@@ -64,6 +65,7 @@ impl ImageWrapper {
     }
 
     /// Scales the image by the given factor, lower than 1.0 will scale down, higher than 1.0 will scale up.
+    #[allow(unused)]
     pub fn scale(&mut self, scale_factor_x: f32, scale_factor_y: f32) {
         let new_width = (self.width as f32 * scale_factor_x) as u32;
         let new_height = (self.height as f32 * scale_factor_y) as u32;

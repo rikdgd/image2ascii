@@ -8,7 +8,7 @@ use image_wrapper::{Image, ImageWrapper};
 use image_converter::{ImageConverter, ImageToTextConverter};
 
 fn main() {
-    let user_args: Vec<String> = args().collect();
+    let user_args: &Vec<String> = &args().collect();
     let config = Config::from_args(user_args).unwrap();
     
     let image_wrapper = ImageWrapper::from_path(&config.image_path).unwrap();
@@ -20,24 +20,22 @@ fn main() {
 
 
 struct Config {
-    bin_path: String,
     image_path: String,
 }
 
 impl Config {
-    pub fn from_args(args: Vec<String>) -> std::io::Result<Self> {
+    pub fn from_args(args: &[String]) -> std::io::Result<Self> {
         if args.len() == 2{
-            let bin_path = args.first().unwrap().clone();
             let image_path = args.get(1).unwrap().clone();
             
             return Ok(Self{
-                bin_path,
                 image_path,
             });
         }
         
-        Err(
-            std::io::Error::new(ErrorKind::InvalidInput, "User provided the wrong amount of arguments.")
-        )
+        Err(std::io::Error::new(
+            ErrorKind::InvalidInput, 
+            "User provided the wrong amount of arguments."
+        ))
     }
 }
