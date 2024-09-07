@@ -79,6 +79,8 @@ const BASE_HTML_START: &str = r#"<!DOCTYPE html>
             color: #eaede8;
             font-size: 2px;
             font-family: "Monaco", monospace;
+            line-height: 120%;
+            white-space: pre;
         }
         
         .image-container {
