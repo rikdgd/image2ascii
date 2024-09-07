@@ -19,28 +19,46 @@ fn main() {
     let ascii_image = converter.convert();
     println!("{ascii_image}");
     
-    let html_generator = HtmlGenerator::from_ascii_image(ascii_image);
-    html_generator.generate_output().expect("Failed to generate HTML file.");
+    if config.generate_html {
+        let html_generator = HtmlGenerator::from_ascii_image(ascii_image);
+        html_generator.generate_output().expect("Failed to generate HTML file.");
+    }
 }
 
 
 struct Config {
     image_path: String,
+    generate_html: bool,
 }
 
 impl Config {
     pub fn from_args(args: &[String]) -> std::io::Result<Self> {
-        if args.len() == 2{
-            let image_path = args.get(1).unwrap().clone();
-            
-            return Ok(Self{
-                image_path,
-            });
+        match args.len() {
+            2 => {
+                let image_path = args.get(1).unwrap().clone();
+                Ok(Self{
+                    image_path,
+                    generate_html: false,
+                })
+            },
+            3 => {
+                let image_path = args.get(1).unwrap().clone();
+                let mut config = Self { image_path, generate_html: false };
+                
+                if let Some(arg) = args.get(2) {
+                    if arg == "--html" {
+                        config.generate_html = true;
+                    }
+                }
+                
+                Ok(config)
+            },
+            _ => {
+                Err(std::io::Error::new(
+                    ErrorKind::InvalidInput,
+                    "User provided the wrong amount of arguments."
+                ))
+            }
         }
-        
-        Err(std::io::Error::new(
-            ErrorKind::InvalidInput, 
-            "User provided the wrong amount of arguments."
-        ))
     }
 }
