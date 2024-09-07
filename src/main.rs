@@ -7,6 +7,7 @@ use std::io::ErrorKind;
 
 use image_wrapper::{Image, ImageWrapper};
 use image_converter::{ImageConverter, ImageToTextConverter};
+use output_generator::{OutputGenerator, HtmlGenerator};
 
 fn main() {
     let user_args: &Vec<String> = &args().collect();
@@ -17,6 +18,9 @@ fn main() {
     
     let ascii_image = converter.convert();
     println!("{ascii_image}");
+    
+    let html_generator = HtmlGenerator::from_ascii_image(ascii_image);
+    html_generator.generate_output().expect("Failed to generate HTML file.");
 }
 
 
