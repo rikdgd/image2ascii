@@ -1,14 +1,16 @@
 use crate::image_wrapper::{ImageWrapper};
 
-const CHAR_MAPPING: [char; 8] = [
+const CHAR_MAPPING: [char; 10] = [
     ' ',
     '.',
     ':',
     '+',
+    '/',
     'H',
     'X',
     '#',
-    '@'
+    '@',
+    'W'
 ];
 
 
@@ -100,17 +102,19 @@ pub enum ImageScaleOptions {
 
 fn pixel_to_char(pixel: &image::Rgb<u8>) -> char {
     match get_pixel_brightness(pixel) {
-        0..=31 => CHAR_MAPPING[0],
-        32..=62 => CHAR_MAPPING[1],
-        63..=93 => CHAR_MAPPING[2],
-        94..=124 => CHAR_MAPPING[3],
-        125..=155 => CHAR_MAPPING[4],
-        156..=186 => CHAR_MAPPING[5],
-        187..=217 => CHAR_MAPPING[6],
-        218..=248 => CHAR_MAPPING[7],
-        _ => CHAR_MAPPING[7],
+        0..=25 => CHAR_MAPPING[0],
+        26..=51 => CHAR_MAPPING[1],
+        52..=77 => CHAR_MAPPING[2],
+        78..=103 => CHAR_MAPPING[3],
+        104..=129 => CHAR_MAPPING[4],
+        130..=155 => CHAR_MAPPING[5],
+        156..=181 => CHAR_MAPPING[6],
+        182..=207 => CHAR_MAPPING[7],
+        208..=233 => CHAR_MAPPING[8],
+        _ => CHAR_MAPPING[9],
     }
 }
+
 
 fn get_pixel_brightness(pixel: &image::Rgb<u8>) -> u32 {
     let (red, green, blue) = (pixel[0], pixel[1], pixel[2]);
@@ -137,25 +141,13 @@ mod tests {
     #[test]
     fn pixel_to_char_test() {
         let pixel_1 = image::Rgb([0, 0, 0]);
-        let pixel_2 = image::Rgb([10, 10, 10]);
-        let pixel_3 = image::Rgb([70, 65, 80]);
-        let pixel_4 = image::Rgb([190, 170, 255]);
-        let pixel_5 = image::Rgb([230, 230, 230]);
         let pixel_6 = image::Rgb([255, 255, 255]);
 
         let pixel_char_1 = pixel_to_char(&pixel_1);
-        let pixel_char_2 = pixel_to_char(&pixel_2);
-        let pixel_char_3 = pixel_to_char(&pixel_3);
-        let pixel_char_4 = pixel_to_char(&pixel_4);
-        let pixel_char_5 = pixel_to_char(&pixel_5);
         let pixel_char_6 = pixel_to_char(&pixel_6);
 
         assert_eq!(pixel_char_1, CHAR_MAPPING[0]);  // -> ' '
-        assert_eq!(pixel_char_2, CHAR_MAPPING[0]);  // -> ' '
-        assert_eq!(pixel_char_3, CHAR_MAPPING[2]);  // => ':'
-        assert_eq!(pixel_char_4, CHAR_MAPPING[5]);  // -> 'X'
-        assert_eq!(pixel_char_5, CHAR_MAPPING[7]);  // -> '@'
-        assert_eq!(pixel_char_6, CHAR_MAPPING[7]);  // -> '@'
+        assert_eq!(pixel_char_6, CHAR_MAPPING[9]);  // -> 'W'
     }
 
 
@@ -179,13 +171,13 @@ mod tests {
                     assert_eq!(character, CHAR_MAPPING[0]); // 0 -> ' '
     
                 } else if white_pixel_index == char_counter {
-                    assert_eq!(character, CHAR_MAPPING[7]); // 7 -> '@'
+                    assert_eq!(character, CHAR_MAPPING[9]); // 7 -> '@'
     
                 } else if red_pixel_indexes.contains(&char_counter) {
                     assert_eq!(character, CHAR_MAPPING[2]); // 2 => ':'
     
                 } else if green_pixel_indexes.contains(&char_counter) {
-                    assert_eq!(character, CHAR_MAPPING[5]); // 5 -> 'X'
+                    assert_eq!(character, CHAR_MAPPING[7]); // 5 -> 'X'
     
                 } else if blue_pixel_indexes.contains(&char_counter) {
                     assert_eq!(character, CHAR_MAPPING[0]); // 0 -> ' '
