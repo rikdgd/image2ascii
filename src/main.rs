@@ -1,5 +1,6 @@
 mod image_wrapper;
 mod image_converter;
+mod output_generator;
 
 use std::env::args;
 use std::io::ErrorKind;
