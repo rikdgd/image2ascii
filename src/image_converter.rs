@@ -24,8 +24,8 @@ const WINDOWS_CHAR_MAPPING: [char; 10] = [
     'x',
     '+',
     '#',
-    'W',
     'H',
+    'W',
     '@'
 ];
 
