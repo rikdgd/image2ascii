@@ -73,6 +73,7 @@ const BASE_HTML_START: &str = r#"<!DOCTYPE html>
 
         html, body {
             height: 100%;
+            background-color: rgb(31, 31, 32);
         }
 
         p {
@@ -87,7 +88,6 @@ const BASE_HTML_START: &str = r#"<!DOCTYPE html>
             width: 100vw;
             height: 100vh;
             color: #eaede8;
-            background-color: rgb(31, 31, 32);
         }
     </style>
 </head>
