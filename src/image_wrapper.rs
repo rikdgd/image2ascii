@@ -37,7 +37,7 @@ impl Image for ImageWrapper {
 
         Ok(
             ImageWrapper {
-                buffer: rgb_image.clone(),
+                buffer: rgb_image,
                 width: image.width(),
                 height: image.height(),
             }
